@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	Interfaces "bot-restaurante/interfaces"
 	"bot-restaurante/utils"
 
 	"cloud.google.com/go/firestore"
@@ -28,23 +29,28 @@ func InitializeFirestore(environment *utils.Environments, ctx context.Context) (
 	return client, nil
 }
 
-func GetAllMenuItems(ctx context.Context, client *firestore.Client) ([]Menu, error) {
+func GetAllMenuActive(ctx context.Context, client *firestore.Client) ([]Interfaces.Menu, error) {
 	doc, err := client.Collection("restaurant_mock").Doc("bhHn47g5CQV0hyt7GPYc").Get(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("Error obteniendo documento 'menu': %v", err)
 	}
 	data := doc.Data()
-	var menu []Menu
+	var menu []Interfaces.Menu
 	for _, v := range data {
 		m, ok := v.(map[string]interface{})
 		if !ok {
 			continue
 		}
-		plato := Menu{
+		active, ok := m["active"].(bool)
+		if !ok || !active {
+			continue
+		}
+
+		plato := Interfaces.Menu{
 			Name:        fmt.Sprintf("%v", m["name"]),
 			Price:       m["price"].(float64),
 			Description: fmt.Sprintf("%v", m["description"]),
-			Active:      m["active"].(bool),
+			Active:      active,
 		}
 		menu = append(menu, plato)
 	}

@@ -11,16 +11,17 @@ import (
 
 	"bot-restaurante/database"
 	"bot-restaurante/ia"
+	Interfaces "bot-restaurante/interfaces"
 	"bot-restaurante/utils"
 
 	"github.com/google/generative-ai-go/genai"
 )
 
 func main() {
-	var menuItems []database.Menu
+	var menuItems []Interfaces.Menu
 	var geminiClient *genai.Client
 
-	environ, err := utils.CargarEnv()
+	environ, err := utils.LoadEnvironment()
 	if err != nil {
 		return
 	}
@@ -33,17 +34,18 @@ func main() {
 	}
 	defer client.Close()
 
-	menuItems, err = database.GetAllMenuItems(ctx, client)
+	menuItems, err = database.GetAllMenuActive(ctx, client)
 	if err != nil {
 		log.Fatalf("Error obteniendo items del menú: %v", err)
+		return
 	}
 
 	fmt.Println("🟢 Menú cargado exitosamente:")
-	fmt.Println("asds : ", menuItems)
 
 	geminiClient, err = ia.ConnectIA(ctx, &environ)
 	if err != nil {
 		log.Fatalf("Error conectando a Gemini: %v", err)
+		return
 	}
 	fmt.Println("🟢 Conexión a Gemini establecida exitosamente")
 	model := geminiClient.GenerativeModel("gemini-2.0-flash")
@@ -51,7 +53,7 @@ func main() {
 	defer geminiClient.Close()
 
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("🟢 Bot listo. Escribe tu consulta (ej: '¿Cuánto cuesta el pollo a la brasa?') o 'salir':")
+	fmt.Println("🟢 Bot listo ✅✅✅")
 
 	jsonMenu, err := json.Marshal(menuItems)
 	if err != nil {
@@ -59,18 +61,20 @@ func main() {
 		return
 	}
 
-	fmt.Println("Menú en formato JSON:", string(jsonMenu))
-
 	for {
 		fmt.Print("\n👤 Usuario: ")
 		userQuery, _ := reader.ReadString('\n')
 		userQuery = strings.TrimSpace(userQuery)
 
-		if strings.ToLower(userQuery) == "salir" {
+		if strings.ToLower(userQuery) == "esc" {
 			break
 		}
 
-		answer := ia.GenerateRespuesta(string(jsonMenu), ctx, model, userQuery)
-		fmt.Printf("\n🤖 Bot: %s\n", answer)
+		answer, err := ia.GenerateAnswer(string(jsonMenu), ctx, model, userQuery)
+		if err != nil {
+			fmt.Println("Error al generar respuestas:", err)
+			return
+		}
+		fmt.Printf("\n🤖 Bot: \n %s", answer)
 	}
 }

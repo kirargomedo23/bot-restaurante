@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"log"
 	"os"
 
@@ -13,16 +14,17 @@ type Environments struct {
 	PROJECT_ID                     string
 }
 
-func CargarEnv() (Environments, error) {
-	environ := Environments{}
+func LoadEnvironment() (Environments, error) {
+	env := Environments{}
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error cargando .env: %v", err)
+		return env, errors.New("Error cargando .env : " + err.Error())
 	}
 
-	environ.API_KEY_GEMINI = os.Getenv("API_KEY_GEMINI")
-	environ.GOOGLE_APPLICATION_CREDENTIALS = os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
-	environ.PROJECT_ID = os.Getenv("PROJECT_ID")
+	env.API_KEY_GEMINI = os.Getenv("API_KEY_GEMINI")
+	env.GOOGLE_APPLICATION_CREDENTIALS = os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+	env.PROJECT_ID = os.Getenv("PROJECT_ID")
 
-	return environ, nil
+	return env, nil
 }
