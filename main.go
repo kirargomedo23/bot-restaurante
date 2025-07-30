@@ -75,6 +75,8 @@ func main() {
 			fmt.Println("Error al generar respuestas:", err)
 			return
 		}
-		fmt.Printf("\n🤖 Bot: \n %s", answer)
+		fmt.Println("🤖🤖🤖 Bot: ")
+		fmt.Printf("%s", answer)
+
 	}
 }
