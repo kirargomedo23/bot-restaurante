@@ -70,7 +70,13 @@ func main() {
 			break
 		}
 
-		answer, err := ia.GenerateAnswer(string(jsonMenu), ctx, model, userQuery)
+		typeQuestion, err := ia.CategorizeQuestion(ctx, model, userQuery)
+		if err != nil {
+			fmt.Println("Error al categorizar la pregunta:", err)
+			return
+		}
+		fmt.Printf("🤖🤖🤖 Bot: \n Tipo de pregunta: %s\n", typeQuestion)
+		answer, err := ia.GenerateAnswer(typeQuestion, string(jsonMenu), ctx, model, userQuery)
 		if err != nil {
 			fmt.Println("Error al generar respuestas:", err)
 			return

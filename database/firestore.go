@@ -5,14 +5,13 @@ import (
 	"fmt"
 
 	Interfaces "bot-restaurante/interfaces"
-	"bot-restaurante/utils"
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"google.golang.org/api/option"
 )
 
-func InitializeFirestore(environment *utils.Environments, ctx context.Context) (*firestore.Client, error) {
+func InitializeFirestore(environment *Interfaces.Environments, ctx context.Context) (*firestore.Client, error) {
 	conf := &firebase.Config{ProjectID: environment.PROJECT_ID}
 	opt := option.WithCredentialsFile(environment.GOOGLE_APPLICATION_CREDENTIALS)
 

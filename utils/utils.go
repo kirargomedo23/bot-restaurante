@@ -1,6 +1,7 @@
 package utils
 
 import (
+	Interfaces "bot-restaurante/interfaces"
 	"errors"
 	"log"
 	"os"
@@ -8,14 +9,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type Environments struct {
-	API_KEY_GEMINI                 string
-	GOOGLE_APPLICATION_CREDENTIALS string
-	PROJECT_ID                     string
-}
-
-func LoadEnvironment() (Environments, error) {
-	env := Environments{}
+func LoadEnvironment() (Interfaces.Environments, error) {
+	env := Interfaces.Environments{}
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error cargando .env: %v", err)
