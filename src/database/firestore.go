@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	Interfaces "bot-restaurante/interfaces"
+	Interfaces "bot-restaurante/src/interfaces"
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"

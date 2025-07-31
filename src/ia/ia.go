@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	Interfaces "bot-restaurante/interfaces"
+	Interfaces "bot-restaurante/src/interfaces"
 	"errors"
 	"strings"
 

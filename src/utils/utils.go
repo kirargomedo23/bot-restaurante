@@ -1,7 +1,7 @@
 package utils
 
 import (
-	Interfaces "bot-restaurante/interfaces"
+	Interfaces "bot-restaurante/src/interfaces"
 	"errors"
 	"log"
 	"os"

@@ -9,10 +9,10 @@ import (
 	"os"
 	"strings"
 
-	"bot-restaurante/database"
-	"bot-restaurante/ia"
-	Interfaces "bot-restaurante/interfaces"
-	"bot-restaurante/utils"
+	"bot-restaurante/src/database"
+	"bot-restaurante/src/ia"
+	Interfaces "bot-restaurante/src/interfaces"
+	"bot-restaurante/src/utils"
 
 	"github.com/google/generative-ai-go/genai"
 )
